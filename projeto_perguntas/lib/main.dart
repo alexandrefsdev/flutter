@@ -1,61 +1,56 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import './questao.dart';
+import './resposta.dart';
 
 main() => runApp(PerguntaApp());
 
-class PerguntaAppState extends State<PerguntaApp> {
-  var perguntaSelecionada = 0;
+class _PerguntaAppState extends State<PerguntaApp> {
+  var _perguntaSelecionada = 0;
 
-  void responder() {
+  void _responder() {
     setState(() {
-      perguntaSelecionada++;
+      _perguntaSelecionada++;
     });
-
-    print(perguntaSelecionada);
   }
 
   @override
   Widget build(BuildContext context) {
-
-    final List<String> perguntas =[
-      'Qual é a sua cor favorita?',
-      'Qual é o seu animal favorito?'
+    final perguntas = [
+      {
+        'texto': 'Qual é a sua cor favorita?',
+        'respostas': ['Preto', 'Vermelho', 'Verde', 'Branco']
+      },
+      {
+        'texto': 'Qual é o seu animal favorito?',
+        'respostas': ['Maria', 'João', 'Leo', 'Pedro']
+      }
     ];
+
+    List<Widget> respostas = [];
+
+    for (var textoResp in perguntas[_perguntaSelecionada]['respostas']) {
+      respostas.add(Resposta(textoResp, _responder));
+    }
 
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: Text('Perguntas'),
-        ),
-        body: Column(
-          children: [
-            Text(perguntas[perguntaSelecionada]),
-            ElevatedButton(
-              onPressed: responder,
-              child: Text('Resposta 1')
-            ),
-            ElevatedButton(
-              onPressed: responder,
-              child: Text('Resposta 2')
-            ),
-            ElevatedButton(
-              onPressed: responder,
-              child: Text('Resposta 3')
-            ),
-          ],
-        )
-      ),
+          appBar: AppBar(
+            title: Text('Perguntas'),
+          ),
+          body: Column(
+            children: [
+              Questao(perguntas[_perguntaSelecionada]['texto']),
+              ...respostas,
+            ],
+          )),
     );
   }
 }
 
 class PerguntaApp extends StatefulWidget {
-
   @override
-  PerguntaAppState createState() {
-    return PerguntaAppState();
+  _PerguntaAppState createState() {
+    return _PerguntaAppState();
   }
-
 }
