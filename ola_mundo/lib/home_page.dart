@@ -21,34 +21,10 @@ class HomePageState extends State<HomePage> {
       body: Container(
           width: double.infinity,
           height: double.infinity,
-          child: ListView(
-            // mainAxisAlignment: MainAxisAlignment.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             // scrollDirection: Axis.horizontal,
             children: [
-              Text("Contador: $counter"),
-              Container(height: 10),
-              CustomSwitch(),
-              Text("Contador: $counter"),
-              Container(height: 10),
-              CustomSwitch(),
-              Text("Contador: $counter"),
-              Container(height: 10),
-              CustomSwitch(),
-              Text("Contador: $counter"),
-              Container(height: 10),
-              CustomSwitch(),
-              Text("Contador: $counter"),
-              Container(height: 10),
-              CustomSwitch(),
-              Text("Contador: $counter"),
-              Container(height: 10),
-              CustomSwitch(),
-              Text("Contador: $counter"),
-              Container(height: 10),
-              CustomSwitch(),
-              Text("Contador: $counter"),
-              Container(height: 10),
-              CustomSwitch(),
               Text("Contador: $counter"),
               Container(height: 10),
               CustomSwitch(),
@@ -63,6 +39,16 @@ class HomePageState extends State<HomePage> {
                   ])
             ],
           )),
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          children: [
+            IconButton(icon: Icon(Icons.menu), onPressed: () {}),
+            Spacer(),
+            IconButton(icon: Icon(Icons.search), onPressed: () {}),
+            IconButton(icon: Icon(Icons.more_vert), onPressed: () {}),
+          ],
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
