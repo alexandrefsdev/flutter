@@ -14,6 +14,40 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // Menu esquerdo
+      drawer: Drawer(
+          child: Column(
+            children: [
+              // Cabeçalho Usuário
+              UserAccountsDrawerHeader(
+                currentAccountPicture: ClipOval(
+                  // Ou
+                  // currentAccountPicture: ClipRRect(
+                  // borderRadius: BorderRadius.circular(40),
+                  child: Image.network(
+                    'http://core.r2ti.com.br/assets/logo-8254567cf15397e05487d0adad9f7c2ef7a7191dd533941d55fd8f4015e504b2.png'
+                    )
+                  ),
+                accountName: Text('Alexandre Silveira'), 
+                accountEmail: Text('alexandrefsdev@gmail.com')
+                ),
+        ListTile(
+          leading: Icon(Icons.home),
+          title: Text('Inicio'),
+          subtitle: Text('Tela de início'),
+          onTap: () {
+            print('home');
+          },
+        ),
+        ListTile(
+          leading: Icon(Icons.home),
+          title: Text('Sair'),
+          subtitle: Text('Finalizar sessão'),
+          onTap: () {
+            Navigator.of(context).pushReplacementNamed('/');
+          },
+        )
+      ])),
       appBar: AppBar(
         title: Text('Home Page'),
         actions: [CustomSwitch()],

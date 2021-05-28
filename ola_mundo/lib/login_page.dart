@@ -73,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
                             height: 40,
                             child: ElevatedButton(
                               onPressed: () {
-                                if (username == 'alexandrefs' &&
+                                if (username == 'afs' &&
                                     password == '123') {
                                   print(username);
                                   print('Correto');
@@ -111,25 +111,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: Drawer(
-            child: Column(children: [
-          ListTile(
-            leading: Icon(Icons.home),
-            title: Text('Inicio'),
-            subtitle: Text('Tela de início'),
-            onTap: () {
-              print('home');
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.home),
-            title: Text('Sair'),
-            subtitle: Text('Finalizar sessão'),
-            onTap: () {
-              Navigator.of(context).pushReplacementNamed('/');
-            },
-          )
-        ])),
 
         // Stack empilha
         body: Stack(
