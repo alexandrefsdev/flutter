@@ -26,9 +26,19 @@ class HomeView extends StatelessWidget {
           child: Column(children: [
             Image.asset('assets/images/logo.png', width: 150, height: 150),
             SizedBox(height: 10),
-            CurrencyBox(),
+            CurrencyBox(
+                selectedItem: homeController.toCurrency,
+                controller: toText,
+                items: homeController.currencies,
+                onChanged: (model) {
+                  print(model.name);
+                }),
             SizedBox(height: 10),
-            CurrencyBox(),
+            CurrencyBox(
+                selectedItem: homeController.fromCurrency,
+                controller: fromText,
+                items: homeController.currencies,
+                onChanged: (model) {}),
             SizedBox(height: 50),
             RaisedButton(
                 onPressed: () {}, child: Text('CONVERTER'), color: Colors.amber)
