@@ -1,3 +1,4 @@
+import 'package:expenses/components/chart.dart';
 import 'package:expenses/components/transaction_form.dart';
 import 'package:expenses/components/transaction_list.dart';
 import 'package:expenses/models/transaction.dart';
@@ -18,9 +19,14 @@ class ExpensesApp extends StatelessWidget {
         fontFamily: 'Quicksand',
         textTheme: ThemeData.light().textTheme.copyWith(
               headline6: TextStyle(
-                  fontFamily: 'Quicksand',
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold),
+                fontFamily: 'Quicksand',
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+              button: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
             ),
         appBarTheme: AppBarTheme(
             textTheme: ThemeData.light().textTheme.copyWith(
@@ -41,50 +47,46 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Transaction> _transactions = [
-    // Transaction(
-    //     id: 't1',
-    //     title: 'Novo Tênis de Corrida',
-    //     value: 310.76,
-    //     date: DateTime.now()),
-    // Transaction(
-    //     id: 't2', title: 'Conta #01', value: 157.99, date: DateTime.now()),
-    // Transaction(
-    //     id: 't3', title: 'Conta #02', value: 99.89, date: DateTime.now()),
-    // Transaction(
-    //     id: 't4', title: 'Conta #03', value: 384.80, date: DateTime.now()),
-    // Transaction(
-    //     id: 't5', title: 'Conta #04', value: 578.45, date: DateTime.now()),
-    // Transaction(
-    //     id: 't6', title: 'Conta #05', value: 723.56, date: DateTime.now()),
-    // Transaction(
-    //     id: 't7', title: 'Conta #06', value: 1025.48, date: DateTime.now()),
-    // Transaction(
-    //     id: 't8', title: 'Conta #07', value: 456.22, date: DateTime.now()),
-    // Transaction(
-    //     id: 't9', title: 'Conta #08', value: 652.43, date: DateTime.now()),
-  ];
+  final List<Transaction> _transactions = [];
 
-  _addTransaction(String title, double value) {
+  List<Transaction> get _recentTransactions {
+    return _transactions.where((tr) {
+      return tr.date.isAfter(DateTime.now().subtract(
+        Duration(days: 7),
+      ));
+    }).toList();
+  }
+
+  _addTransaction(String title, double value, DateTime date) {
     final newTransaction = Transaction(
-        id: Random().nextDouble().toString(),
-        title: title,
-        value: value,
-        date: DateTime.now());
+      id: Random().nextDouble().toString(),
+      title: title,
+      value: value,
+      date: date,
+    );
 
-    setState(() {
-      _transactions.add(newTransaction);
-    });
+    setState(
+      () {
+        _transactions.add(newTransaction);
+      },
+    );
     // Fecha modal...Retirando ele da pilha
     Navigator.of(context).pop();
   }
 
+  _removeTransaction(String id) {
+    setState(() {
+      _transactions.removeWhere((tr) => tr.id == id);
+    });
+  }
+
   _openTransactionFormModal(BuildContext context) {
     showModalBottomSheet(
-        context: context,
-        builder: (_) {
-          return TransactionForm(_addTransaction);
-        });
+      context: context,
+      builder: (_) {
+        return TransactionForm(_addTransaction);
+      },
+    );
   }
 
   @override
@@ -104,16 +106,8 @@ class _MyHomePageState extends State<MyHomePage> {
           // mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Container(
-              width: double.infinity,
-              child: Card(
-                color: Colors.blue,
-                child: Text('Grafico'),
-                elevation: 10,
-              ),
-            ),
-            TransactionList(_transactions),
-            // TransactionUser()
+            Chart(_recentTransactions),
+            TransactionList(_transactions, _removeTransaction),           // TransactionUser()
           ],
         ),
       ),

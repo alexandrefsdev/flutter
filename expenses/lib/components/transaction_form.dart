@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 class TransactionForm extends StatefulWidget {
-  final void Function(String, double) onSubmit;
+  final void Function(String, double, DateTime) onSubmit;
 
   TransactionForm(this.onSubmit);
 
@@ -11,19 +12,42 @@ class TransactionForm extends StatefulWidget {
 }
 
 class _TransactionFormState extends State<TransactionForm> {
-  final titleController = TextEditingController();
-  final valueController = TextEditingController();
+  final _titleController = TextEditingController();
+  final _valueController = TextEditingController();
+  DateTime _selectedDate = DateTime.now();
 
   _submitForm() {
-    final title = titleController.text;
-    final value = double.tryParse(valueController.text) ?? 0.0;
+    final title = _titleController.text;
+    final value = double.tryParse(_valueController.text) ?? 0.0;
 
     if (title.isEmpty || value <= 0) {
       return;
     }
 
-    widget.onSubmit(title,
-        value); // Forma de comunição da classe privada _TransactionFormState com o widget
+    widget.onSubmit(
+      title,
+      value,
+      _selectedDate,
+    ); // Forma de comunição da classe privada _TransactionFormState com o widget
+  }
+
+  _showDatePicker() {
+    showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2019),
+      lastDate: DateTime.now(),
+    ).then(
+      (pickedDate) {
+        if (pickedDate == null) {
+          return;
+        }
+
+        setState(() {
+          _selectedDate = pickedDate;
+        });
+      },
+    );
   }
 
   @override
@@ -35,28 +59,62 @@ class _TransactionFormState extends State<TransactionForm> {
         child: Column(
           children: <Widget>[
             TextField(
-              controller: titleController,
+              controller: _titleController,
               decoration: InputDecoration(labelText: 'Título'),
               onSubmitted: (_) =>
                   _submitForm(), // Tenta submeter, mesmo sem clicar no botão
             ),
             TextField(
-              controller: valueController,
+              controller: _valueController,
               keyboardType: TextInputType.numberWithOptions(
-                  decimal:
-                      true), // Muda o teclado para numerico quando este teclado for selecionado
+                decimal: true,
+              ), // Muda o teclado para numerico quando este teclado for selecionado
               decoration: InputDecoration(labelText: 'Valor (R\$)'),
               onSubmitted: (_) =>
                   _submitForm(), // Tenta submeter, mesmo sem clicar no botão
             ),
-            TextButton(
-              style: TextButton.styleFrom(
-                padding: const EdgeInsets.all(16.0),
-                primary: Colors.purple,
-                textStyle: const TextStyle(fontSize: 16),
+            Container(
+              height: 70,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      _selectedDate == null
+                          ? 'Nenhuma data selecionada!'
+                          : 'Data Selecionada: ${DateFormat('dd/MM/y').format(_selectedDate)}',
+                    ),
+                  ),
+                  TextButton(
+                    child: Text(
+                      "Selecionar Data",
+                    ),
+                    style: TextButton.styleFrom(
+                      primary: Theme.of(context).primaryColor,
+                      textStyle: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    onPressed: _showDatePicker,
+                  ),
+                ],
               ),
-              child: Text('Nova Transação'),
-              onPressed: _submitForm,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.all(8.0),
+                    primary: Theme.of(context).primaryColor,
+                    textStyle: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      // color: Theme.of(context).textTheme.button.color,
+                    ),
+                  ),
+                  child: Text('Nova Transação'),
+                  onPressed: _submitForm,
+                ),
+              ],
             ),
           ],
         ),
