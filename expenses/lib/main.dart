@@ -100,6 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    print('build() _MyHomePageState');
     final mediaQuery = MediaQuery.of(context);
     // Retorna bool = retorna se tiver virado...
     bool isLandscape =
@@ -171,10 +172,12 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       //  Platform.isIOS -> Verifica se está no IOS
-      floatingActionButton: Platform.isIOS ? Container() : FloatingActionButton(
-        onPressed: () => _openTransactionFormModal(context),
-        child: Icon(Icons.add),
-      ), // Botão add no flutuante
+      floatingActionButton: Platform.isIOS
+          ? Container()
+          : FloatingActionButton(
+              onPressed: () => _openTransactionFormModal(context),
+              child: Icon(Icons.add),
+            ), // Botão add no flutuante
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }

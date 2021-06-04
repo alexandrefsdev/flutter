@@ -8,7 +8,9 @@ import 'chart_bar.dart';
 class Chart extends StatelessWidget {
   final List<Transaction> recentTransaction;
 
-  Chart(this.recentTransaction);
+  Chart(this.recentTransaction) {
+    print('Constructor Chart');
+  }
 
   List<Map<String, Object>> get groupedTransactions {
     return List.generate(7, (index) {
@@ -39,6 +41,7 @@ class Chart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('build() Chart');
     return Card(
       elevation: 20,
       margin: EdgeInsets.all(20),
