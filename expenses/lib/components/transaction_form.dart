@@ -52,71 +52,78 @@ class _TransactionFormState extends State<TransactionForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 10,
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          children: <Widget>[
-            TextField(
-              controller: _titleController,
-              decoration: InputDecoration(labelText: 'Título'),
-              onSubmitted: (_) =>
-                  _submitForm(), // Tenta submeter, mesmo sem clicar no botão
-            ),
-            TextField(
-              controller: _valueController,
-              keyboardType: TextInputType.numberWithOptions(
-                decimal: true,
-              ), // Muda o teclado para numerico quando este teclado for selecionado
-              decoration: InputDecoration(labelText: 'Valor (R\$)'),
-              onSubmitted: (_) =>
-                  _submitForm(), // Tenta submeter, mesmo sem clicar no botão
-            ),
-            Container(
-              height: 70,
-              child: Row(
+    return SingleChildScrollView(
+      child: Card(
+        elevation: 10,
+        child: Padding(
+          padding: EdgeInsets.only(
+            top: 10,
+            right: 10,
+            left: 10,
+            bottom: 20 + MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: Column(
+            children: <Widget>[
+              TextField(
+                controller: _titleController,
+                decoration: InputDecoration(labelText: 'Título'),
+                onSubmitted: (_) =>
+                    _submitForm(), // Tenta submeter, mesmo sem clicar no botão
+              ),
+              TextField(
+                controller: _valueController,
+                keyboardType: TextInputType.numberWithOptions(
+                  decimal: true,
+                ), // Muda o teclado para numerico quando este teclado for selecionado
+                decoration: InputDecoration(labelText: 'Valor (R\$)'),
+                onSubmitted: (_) =>
+                    _submitForm(), // Tenta submeter, mesmo sem clicar no botão
+              ),
+              Container(
+                height: 70,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        _selectedDate == null
+                            ? 'Nenhuma data selecionada!'
+                            : 'Data Selecionada: ${DateFormat('dd/MM/y').format(_selectedDate)}',
+                      ),
+                    ),
+                    TextButton(
+                      child: Text(
+                        "Selecionar Data",
+                      ),
+                      style: TextButton.styleFrom(
+                        primary: Theme.of(context).primaryColor,
+                        textStyle: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      onPressed: _showDatePicker,
+                    ),
+                  ],
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Expanded(
-                    child: Text(
-                      _selectedDate == null
-                          ? 'Nenhuma data selecionada!'
-                          : 'Data Selecionada: ${DateFormat('dd/MM/y').format(_selectedDate)}',
-                    ),
-                  ),
-                  TextButton(
-                    child: Text(
-                      "Selecionar Data",
-                    ),
-                    style: TextButton.styleFrom(
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.all(8.0),
                       primary: Theme.of(context).primaryColor,
                       textStyle: TextStyle(
                         fontWeight: FontWeight.bold,
+                        // color: Theme.of(context).textTheme.button.color,
                       ),
                     ),
-                    onPressed: _showDatePicker,
+                    child: Text('Nova Transação'),
+                    onPressed: _submitForm,
                   ),
                 ],
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.all(8.0),
-                    primary: Theme.of(context).primaryColor,
-                    textStyle: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      // color: Theme.of(context).textTheme.button.color,
-                    ),
-                  ),
-                  child: Text('Nova Transação'),
-                  onPressed: _submitForm,
-                ),
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
