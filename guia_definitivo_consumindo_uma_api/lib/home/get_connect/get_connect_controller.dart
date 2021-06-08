@@ -1,14 +1,13 @@
 import 'package:get/get.dart';
 import 'package:guia_definitivo_consumindo_uma_api/repository/i_project_repository.dart';
 
-class HttpController extends GetxController with StateMixin {
+class GetConnectController extends GetxController with StateMixin {
   final IProjectRepository _httpRepository;
 
-  HttpController(this._httpRepository);
+  GetConnectController(this._httpRepository);
 
   @override
   void onInit() {
-    // TODO: implement onInit
     super.onInit();
     findProjects();
   }

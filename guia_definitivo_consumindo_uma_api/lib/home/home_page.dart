@@ -20,11 +20,11 @@ class HomePage extends StatelessWidget {
               child: Text('HTTP', style: TextStyle(fontSize: 28)),
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: () => Get.toNamed('/dio'),
               child: Text('DIO', style: TextStyle(fontSize: 28)),
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: () => Get.toNamed("/getconnect"),
               child: Text('GetConnect', style: TextStyle(fontSize: 28)),
             ),
           ],

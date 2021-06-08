@@ -1,14 +1,14 @@
 import 'package:get/get.dart';
+import 'package:guia_definitivo_consumindo_uma_api/home/dio/repository/project_repository_dio.dart';
 import 'package:guia_definitivo_consumindo_uma_api/repository/i_project_repository.dart';
 
-class HttpController extends GetxController with StateMixin {
-  final IProjectRepository _httpRepository;
+class DioController extends GetxController with StateMixin {
+  final IProjectRepository _dioRepository;
 
-  HttpController(this._httpRepository);
+  DioController(this._dioRepository);
 
   @override
   void onInit() {
-    // TODO: implement onInit
     super.onInit();
     findProjects();
   }
@@ -16,7 +16,7 @@ class HttpController extends GetxController with StateMixin {
   Future<void> findProjects() async {
     change([], status: RxStatus.loading());
     try {
-      final dados = await _httpRepository.findAllProjects();
+      final dados = await _dioRepository.findAllProjects();
       change(dados, status: RxStatus.success());
     } on Exception catch (e) {
       print(e);

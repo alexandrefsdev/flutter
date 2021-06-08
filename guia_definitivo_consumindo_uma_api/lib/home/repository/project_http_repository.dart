@@ -7,11 +7,16 @@ import 'package:http/http.dart' as http;
 class ProjectHttpRepository implements IProjectRepository {
   @override
   Future<List<ProjectModel>> findAllProjects() async {
-    var url = Uri.parse('http://core.r2ti.com.br/api/v1/projects?user_id=2');
-    final response = await http.get(url);
-    final List<dynamic> responseMap = jsonDecode(response.body);
-    return responseMap
-        .map<ProjectModel>((resp) => ProjectModel.fromMap(resp))
-        .toList();
+    try {
+      var url = Uri.parse('http://core.r2ti.com.br/api/v1/projects?user_id=2');
+      final response = await http.get(url);
+      final List<dynamic> responseMap = jsonDecode(response.body);
+      return responseMap
+          .map<ProjectModel>((resp) => ProjectModel.fromMap(resp))
+          .toList();
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
   }
 }
