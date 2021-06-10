@@ -1,4 +1,7 @@
-class Product {
+import 'package:flutter/material.dart';
+
+// Observer adicionado para gerencia o Favorite
+class Product with ChangeNotifier {
   final String id;
   final String title;
   final String description;
@@ -15,4 +18,8 @@ class Product {
     this.isFavorite = false,
   });
 
+  void toggleFavorite() {
+    isFavorite = !isFavorite;
+    notifyListeners();
+  }
 }
