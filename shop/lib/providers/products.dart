@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:shop/data/dummy_data.dart';
-import 'package:shop/providers/product.dart';
+import 'package:shop/models/product.dart';
 import '../data/dummy_data.dart';
 
 // [CUIDA DA LISTA DE PRODUTOS DA APP]
