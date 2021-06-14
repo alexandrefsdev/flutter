@@ -1,3 +1,4 @@
+import 'package:core_mobile/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -21,7 +22,7 @@ class _LoginPageState extends State<LoginPage> {
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height - 80,
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(12.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -40,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
                       labelText: 'Usuário',
                       border: OutlineInputBorder(
                         borderRadius: const BorderRadius.all(
-                          const Radius.circular(8.0),
+                          const Radius.circular(12.0),
                         ),
                       )),
                 ),
@@ -51,32 +52,42 @@ class _LoginPageState extends State<LoginPage> {
                   },
                   obscureText: true,
                   decoration: InputDecoration(
-                      labelText: 'Senha',
-                      border: OutlineInputBorder(
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(8.0),
-                        ),
-                      )),
+                    labelText: 'Senha',
+                    border: OutlineInputBorder(
+                      borderRadius: const BorderRadius.all(
+                        const Radius.circular(12.0),
+                      ),
+                    ),
+                  ),
                 ),
-                SizedBox(height: 15),
-                ElevatedButton(
-                  onPressed: () {
-                    if (username == 'alexandrefs' && password == '123') {
-                      print(username);
-                      print('Correto');
-                      // // Esse pushReplacement evita que quando seja feito o login, possa retornar a está tela retirando-a do breadcrumb
-                      // Navigator.of(context).pushReplacement(
-                      //   MaterialPageRoute(builder: (context) => HomePage())
-                      // );
-                      // Passar para a tela pro nome de rota declarada no app_widget
-                      Navigator.of(context).pushReplacementNamed('/home');
-                    } else {
-                      print('Login inválido');
-                    }
-                  },
-                  child: Text('Entrar',style: TextStyle(fontSize: 15)),
-                  style: ElevatedButton.styleFrom(
-                    primary: Color.fromRGBO(157,12,21, 1),
+                SizedBox(height: 35),
+                Container(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      if (username == 'a' && password == '123') {
+                        print(username);
+                        print('Correto');
+                        // // Esse pushReplacement evita que quando seja feito o login, possa retornar a está tela retirando-a do breadcrumb
+                        // Navigator.of(context).pushReplacement(
+                        //   MaterialPageRoute(builder: (context) => HomePage())
+                        // );
+                        // Passar para a tela pro nome de rota declarada no app_widget
+                        Navigator.of(context)
+                            .pushReplacementNamed(AppRoutes.PROJECTS);
+                      } else {
+                        print('Login inválido');
+                      }
+                    },
+                    label: Text('Entrar', style: TextStyle(fontSize: 15)),
+                    style: ElevatedButton.styleFrom(
+                      primary: Color.fromRGBO(157, 12, 21, 1),
+                      shape: new RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(30.0),
+                      ),
+                    ),
+                    icon: Icon(Icons.gps_fixed),
                   ),
                 ),
                 // ElevatedButton(

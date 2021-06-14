@@ -1,5 +1,8 @@
 import 'package:core_mobile/utils/app_routes.dart';
+import 'package:core_mobile/views/login_page.dart';
+import 'package:core_mobile/views/projects_screen.dart';
 import 'package:core_mobile/views/tabs_screen.dart';
+import 'package:core_mobile/views/tasks_screen.dart';
 import 'package:flutter/material.dart';
 
 main() {
@@ -16,7 +19,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.red,
         accentColor: Colors.amber,
         fontFamily: 'Lato',
-        canvasColor: Color.fromRGBO(255, 254, 229, 1),
+        // canvasColor: Color.fromRGBO(255, 254, 229, 1),
         textTheme: ThemeData.light().textTheme.copyWith(
               headline6: TextStyle(
                 fontSize: 20,
@@ -25,7 +28,9 @@ class MyApp extends StatelessWidget {
             ),
       ),
       routes: {
-        AppRoutes.HOME: (ctx) => TabsScreen(),
+        AppRoutes.HOME: (ctx) => LoginPage(),
+        AppRoutes.PROJECTS: (ctx) => TabsScreen(),
+        AppRoutes.TASKS: (ctx) => TasksScreen(),
         // AppRoutes.CATEGORIES_MEALS: (ctx) => CategoriesMealsScreen(),
         // AppRoutes.MEAL_DETAIL: (ctx) => MealDetailScreen(),
       },

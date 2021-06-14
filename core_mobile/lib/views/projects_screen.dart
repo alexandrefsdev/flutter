@@ -1,9 +1,10 @@
 import 'package:core_mobile/data/dummy_data.dart';
 import 'package:core_mobile/models/project.dart';
+import 'package:core_mobile/widgets/project_item_widget.dart';
 import 'package:flutter/material.dart';
 
 class ProjectsScreen extends StatelessWidget {
-  final List<Project> projects = DUMMY_PROJECTS.toList();
+  final List<Project> projects = DUMMY_PROJECTS;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,7 +17,9 @@ class ProjectsScreen extends StatelessWidget {
             // R2 -> LISTAGEM
             child: ListView.builder(
               itemCount: projects.length,
-              itemBuilder: (ctx, index) => projects[index].,
+              itemBuilder: (ctx, index) => ProjectItemWidget(
+                projects[index],
+              ),
             ),
           ),
         ],
