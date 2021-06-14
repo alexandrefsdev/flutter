@@ -10,7 +10,11 @@ class Products with ChangeNotifier {
   // Esse operador spread faz uma copia da lista
   // [BOA PRATICA] para evitar que mexam na lista principal
   List<Product> get items => [..._items];
-  
+
+  int get itemsCount {
+    return _items.length;
+  }
+
   List<Product> get favoriteItems {
     return _items.where((prod) => prod.isFavorite).toList();
   }
