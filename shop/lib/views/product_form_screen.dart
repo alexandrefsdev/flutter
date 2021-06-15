@@ -1,7 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shop/models/product.dart';
+import 'package:shop/providers/products.dart';
 
 class ProductFormScreen extends StatefulWidget {
   @override
@@ -18,13 +18,53 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _imageUrlFocusNode.addListener(_updateImage);
   }
 
+  // Quando houver mudanças nas dependencias
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (_formData.isEmpty) {
+      final Product? product =
+          ModalRoute.of(context)!.settings.arguments as Product?;
+
+      if (product != null) {
+        _formData['id'] = product.id as String;
+        _formData['title'] = product.title;
+        _formData['description'] = product.description;
+        _formData['price'] = product.price;
+        _formData['imageUrl'] = product.imageUrl;
+
+        _imageUrlController.text = _formData['imageUrl'].toString();
+      } else {
+        _formData['id'] = Null;
+        _formData['title'] = '';
+        _formData['description'] = '';
+        _formData['price'] = '';
+        _formData['imageUrl'] = '';
+      }
+    }
+  }
+
   void _updateImage() {
-    setState(() {});
+    if (isValidImageUrl(_imageUrlController.text)) {
+      setState(() {});
+    }
+  }
+
+  // Algumas validações para a url da imagem
+  bool isValidImageUrl(String url) {
+    bool startWithHttp = url.toLowerCase().startsWith('http://');
+    bool startWithHttps = url.toLowerCase().startsWith('https://');
+    bool endsWithPng = url.toLowerCase().endsWith('.png');
+    bool endsWithJpg = url.toLowerCase().endsWith('.jpg');
+    bool endsWithJpeg = url.toLowerCase().endsWith('.jpeg');
+
+    return (startWithHttp || startWithHttps) &&
+        (endsWithPng || endsWithJpg || endsWithJpeg);
   }
 
   @override
@@ -45,17 +85,21 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
 
     _form.currentState!.save();
 
-    final newProduct = Product(
-      id: Random().nextDouble().toString(),
-      title: _formData['title'] as String,
-      description: _formData['description'] as String,
+    final product = Product(
+      id: _formData['id'].toString(),
+      title: _formData['title'].toString(),
+      description: _formData['description'].toString(),
       price: _formData['price'] as double,
       imageUrl: _formData['imageUrl'] as String,
     );
 
-    print(newProduct.id);
-    print(newProduct.title);
-    print(newProduct.price);
+    final products = Provider.of<Products>(context, listen: false);
+    if (_formData['id'] == Null) {
+      products.addProduct(product);
+    } else {
+      products.updateProduct(product);
+    }
+    Navigator.of(context).pop();
   }
 
   @override
@@ -79,6 +123,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
           child: ListView(
             children: [
               TextFormField(
+                initialValue: _formData['title'].toString(),
                 decoration: InputDecoration(labelText: 'Título'),
                 // Função para que apos o enter, va para o proximo input
                 textInputAction: TextInputAction.next,
@@ -88,17 +133,17 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                 },
                 onSaved: (value) => _formData['title'] = value!,
                 validator: (value) {
-                  if (value!.trim().isEmpty) {
-                    return 'Informe um título válido!';
-                  }
+                  bool isEmpty = value!.trim().isEmpty;
+                  bool isInvalid = value.trim().length < 3;
 
-                  if (value!.trim().length < 3) {
-                    return 'Informe um título com no mínimo 3 letras!';
+                  if (isEmpty || isInvalid) {
+                    return 'Informe um Título válido com no mínimo 3 caracteres!';
                   }
                   return null;
                 },
               ),
               TextFormField(
+                initialValue: _formData['price'].toString(),
                 decoration: InputDecoration(labelText: 'Preço'),
                 focusNode: _priceFocusNode,
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
@@ -108,14 +153,38 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                   FocusScope.of(context).requestFocus(_descriptionFocusNode);
                 },
                 onSaved: (value) => _formData['price'] = double.parse(value!),
+                validator: (value) {
+                  bool isEmpty = value!.trim().isEmpty;
+                  var newPrice = double.tryParse(value);
+                  bool isInvalid = newPrice == null || newPrice <= 0;
+                  if (isEmpty || isInvalid) {
+                    return 'Informe um Preço válido!';
+                  }
+
+                  return null;
+                },
               ),
               TextFormField(
+                initialValue: _formData['description'].toString(),
                 decoration: InputDecoration(labelText: 'Descrição'),
                 maxLines: 3,
                 keyboardType: TextInputType.multiline,
                 // Função para que apos o enter, va para o proximo input
                 focusNode: _descriptionFocusNode,
                 onSaved: (value) => _formData['description'] = value!,
+                validator: (value) {
+                  bool isEmpty = value!.trim().isEmpty;
+                  bool isInvalid = value.trim().length < 10;
+
+                  if (isEmpty) {
+                    return 'Informe um Descrição válido!';
+                  }
+
+                  if (isInvalid) {
+                    return 'Informe um título com no mínimo 10 letras!';
+                  }
+                  return null;
+                },
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -133,6 +202,15 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                         _saveForm();
                       },
                       onSaved: (value) => _formData['imageUrl'] = value!,
+                      validator: (value) {
+                        bool isEmpty = value!.trim().isEmpty;
+                        bool isInvalid = !isValidImageUrl(value);
+                        if (isEmpty || isInvalid) {
+                          return 'Informe uma URL válida!';
+                        }
+
+                        return null;
+                      },
                     ),
                   ),
                   Container(

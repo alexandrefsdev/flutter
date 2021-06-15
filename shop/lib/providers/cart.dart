@@ -27,10 +27,10 @@ class Cart with ChangeNotifier {
     // Se o item já com est id já tive no carrinho, faça o update
     // somando a quantidade de 1.
     if (_items.containsKey(product.id)) {
-      _items.update(product.id, (existingItem) {
+      _items.update(product.id as String, (existingItem) {
         return CartItem(
           id: existingItem.id,
-          productId: product.id,
+          productId: product.id as String,
           title: existingItem.title,
           quantity: existingItem.quantity + 1,
           price: existingItem.price,
@@ -39,10 +39,10 @@ class Cart with ChangeNotifier {
     } else {
       // [putIfAbsent] inclui se não estiver presente
       _items.putIfAbsent(
-        product.id,
+        product.id as String,
         () => CartItem(
           id: Random().nextDouble.toString(),
-          productId: product.id,
+          productId: product.id as String,
           title: product.title,
           quantity: 1,
           price: product.price,
