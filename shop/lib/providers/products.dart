@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/widgets.dart';
+import 'package:http/http.dart' as http;
 import 'package:shop/data/dummy_data.dart';
 import 'package:shop/models/product.dart';
 import '../data/dummy_data.dart';
@@ -27,9 +29,22 @@ class Products with ChangeNotifier {
   // portanto, é chamado o notifyListeners para "avisar"
   // da alteração
   void addProduct(Product newProduct) {
+    Uri url = Uri.parse(
+        "https://flutter-cod3r-30ff4-default-rtdb.firebaseio.com/products.json");
+
+    http.post(
+      url,
+      body: json.encode({
+        'title': newProduct.title,
+        'description': newProduct.description,
+        'price': newProduct.price,
+        'imageUrl': newProduct.imageUrl,
+        'isFavorite': newProduct.isFavorite,
+      }),
+    ).then((response) {
     _items.add(
       Product(
-        id: Random().nextDouble().toString(),
+        id: json.decode(response.body)['name'],
         title: newProduct.title,
         description: newProduct.description,
         price: newProduct.price,
@@ -37,6 +52,10 @@ class Products with ChangeNotifier {
       ),
     );
     notifyListeners();
+    });
+
+
+
   }
 
   void updateProduct(Product product) {
