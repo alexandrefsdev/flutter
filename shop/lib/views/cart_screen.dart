@@ -42,10 +42,8 @@ class CartScreen extends StatelessWidget {
                   Spacer(),
                   TextButton(
                     onPressed: () {
-                      Provider.of<Orders>(context, listen: false).addOrder(
-                        cartItems,
-                        cart.totalAmount,
-                      );
+                      Provider.of<Orders>(context, listen: false)
+                          .addOrder(cart);
                       cart.clear();
                     },
                     child: Text(
