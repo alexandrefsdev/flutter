@@ -1,16 +1,17 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
-import 'package:shop/data/dummy_data.dart';
+import 'package:shop/exceptions/http_exception.dart';
 import 'package:shop/models/product.dart';
-import '../data/dummy_data.dart';
 
 // [CUIDA DA LISTA DE PRODUTOS DA APP]
 // Vai ficar escutando qualquer alteração
 class Products with ChangeNotifier {
-  List<Product> _items = DUMMY_PRODUCTS;
+  final String _baseUrl =
+      "https://flutter-cod3r-30ff4-default-rtdb.firebaseio.com/products";
+  // List<Product> _items = DUMMY_PRODUCTS;
+  List<Product> _items = [];
   // Esse operador spread faz uma copia da lista
   // [BOA PRATICA] para evitar que mexam na lista principal
   List<Product> get items => [..._items];
@@ -23,17 +24,35 @@ class Products with ChangeNotifier {
     return _items.where((prod) => prod.isFavorite).toList();
   }
 
-  bool _showFavoriteOnly = false;
+  Future<void> loadProducts() async {
+    final Uri _urlLoad = Uri.parse("${_baseUrl}.json");
+    final response = await http.get(_urlLoad);
+    Map<String, dynamic>? data = json.decode(response.body);
+    _items.clear();
+    if (data != null) {
+      data.forEach((productId, productData) {
+        _items.add(Product(
+          id: productId,
+          title: productData['title'],
+          description: productData['description'],
+          price: productData['price'],
+          imageUrl: productData['imageUrl'],
+          isFavorite: productData['isFavorite'],
+        ));
+      });
+      notifyListeners();
+      return Future.value();
+    }
+  }
 
   // ao adicionar produtos, há uma mudança na lista.
   // portanto, é chamado o notifyListeners para "avisar"
   // da alteração
-  void addProduct(Product newProduct) {
-    Uri url = Uri.parse(
-        "https://flutter-cod3r-30ff4-default-rtdb.firebaseio.com/products.json");
+  Future<void> addProduct(Product newProduct) async {
+    final Uri _urlAdd = Uri.parse("${_baseUrl}.json");
 
-    http.post(
-      url,
+    final response = await http.post(
+      _urlAdd,
       body: json.encode({
         'title': newProduct.title,
         'description': newProduct.description,
@@ -41,7 +60,7 @@ class Products with ChangeNotifier {
         'imageUrl': newProduct.imageUrl,
         'isFavorite': newProduct.isFavorite,
       }),
-    ).then((response) {
+    );
     _items.add(
       Product(
         id: json.decode(response.body)['name'],
@@ -52,13 +71,9 @@ class Products with ChangeNotifier {
       ),
     );
     notifyListeners();
-    });
-
-
-
   }
 
-  void updateProduct(Product product) {
+  Future<void> updateProduct(Product product) async {
     if (product == null || product.id == null) {
       return;
     }
@@ -66,16 +81,40 @@ class Products with ChangeNotifier {
     final index = _items.indexWhere((prod) => prod.id == product.id);
 
     if (index >= 0) {
+      final Uri _urlUpdate = Uri.parse("${_baseUrl}/${product.id}.json");
+      await http.patch(
+        _urlUpdate,
+        body: json.encode({
+          'title': product.title,
+          'description': product.description,
+          'price': product.price,
+          'imageUrl': product.imageUrl,
+        }),
+      );
       _items[index] = product;
       notifyListeners();
     }
   }
 
-  void deleteProduct(String id) {
+  Future<void> deleteProduct(String id) async {
     final index = _items.indexWhere((prod) => prod.id == id);
     if (index >= 0) {
-      _items.removeWhere((prod) => prod.id == id);
+      final product = _items[index];
+      final Uri _urlDelete = Uri.parse("${_baseUrl}/${product.id}");
+      _items.remove(product);
       notifyListeners();
+
+      final response = await http.delete(_urlDelete);
+
+      if (response.statusCode >= 400) {
+        _items.insert(index, product);
+        notifyListeners();
+        throw HttpException('Ocorreu um erro na exclusão do produto.');
+      }
+      // else {
+      //   _items.remove(product);
+      //   notifyListeners();
+      // }
     }
   }
 }
