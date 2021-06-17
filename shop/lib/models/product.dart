@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shop/utils/constants.dart';
 
 // Observer adicionado para gerencia o Favorite
 class Product with ChangeNotifier {
@@ -30,7 +31,7 @@ class Product with ChangeNotifier {
     _toggleFavorite();
     try {
       final Uri _url = Uri.parse(
-          "https://flutter-cod3r-30ff4-default-rtdb.firebaseio.com/products/$id.json");
+          "${Constants.BASE_API_URL}/products/$id.json");
       final response = await http.patch(
         _url,
         body: json.encode({

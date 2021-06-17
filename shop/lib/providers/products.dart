@@ -4,12 +4,12 @@ import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:shop/exceptions/http_exception.dart';
 import 'package:shop/models/product.dart';
+import 'package:shop/utils/constants.dart';
 
 // [CUIDA DA LISTA DE PRODUTOS DA APP]
 // Vai ficar escutando qualquer alteração
 class Products with ChangeNotifier {
-  final String _baseUrl =
-      "https://flutter-cod3r-30ff4-default-rtdb.firebaseio.com/products";
+  final String _baseUrl = "${Constants.BASE_API_URL}/products";
   // List<Product> _items = DUMMY_PRODUCTS;
   List<Product> _items = [];
   // Esse operador spread faz uma copia da lista
