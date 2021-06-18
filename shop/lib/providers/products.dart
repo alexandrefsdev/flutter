@@ -12,6 +12,9 @@ class Products with ChangeNotifier {
   final String _baseUrl = "${Constants.BASE_API_URL}/products";
   // List<Product> _items = DUMMY_PRODUCTS;
   List<Product> _items = [];
+  String? _token;
+
+  Products(this._token, this._items);
   // Esse operador spread faz uma copia da lista
   // [BOA PRATICA] para evitar que mexam na lista principal
   List<Product> get items => [..._items];
@@ -25,7 +28,7 @@ class Products with ChangeNotifier {
   }
 
   Future<void> loadProducts() async {
-    final Uri _urlLoad = Uri.parse("${_baseUrl}.json");
+    final Uri _urlLoad = Uri.parse("${_baseUrl}.json?auth=$_token");
     final response = await http.get(_urlLoad);
     Map<String, dynamic>? data = json.decode(response.body);
     _items.clear();
