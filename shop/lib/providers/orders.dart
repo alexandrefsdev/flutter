@@ -8,9 +8,12 @@ import 'package:shop/providers/cart.dart';
 import 'package:shop/utils/constants.dart';
 
 class Orders with ChangeNotifier {
-  final String _baseUrl =
-      "${Constants.BASE_API_URL}/orders";
+  final String _baseUrl = "${Constants.BASE_API_URL}/orders";
+  String? _token;
   List<Order> _items = [];
+  String? _userId;
+
+  Orders([this._token, this._userId, this._items = const []]);
 
   List<Order> get items {
     return [..._items];
@@ -22,7 +25,7 @@ class Orders with ChangeNotifier {
 
   Future<void> loadOrders() async {
     List<Order> loadedItems = [];
-    final Uri _urlLoad = Uri.parse("${_baseUrl}.json");
+    final Uri _urlLoad = Uri.parse("$_baseUrl/$_userId.json?auth=$_token");
     final response = await http.get(_urlLoad);
     Map<String, dynamic>? data = json.decode(response.body);
 
@@ -54,7 +57,7 @@ class Orders with ChangeNotifier {
   }
 
   Future<void> addOrder(Cart cart) async {
-    final Uri _addOrderUrl = Uri.parse("$_baseUrl.json");
+    final Uri _addOrderUrl = Uri.parse("$_baseUrl/$_userId.json?auth=$_token");
     final date = DateTime.now();
     final response = await http.post(
       _addOrderUrl,

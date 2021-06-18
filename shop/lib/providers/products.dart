@@ -13,8 +13,9 @@ class Products with ChangeNotifier {
   // List<Product> _items = DUMMY_PRODUCTS;
   List<Product> _items = [];
   String? _token;
+  String? _userId;
 
-  Products(this._token, this._items);
+  Products([this._token, this._userId, this._items = const []]);
   // Esse operador spread faz uma copia da lista
   // [BOA PRATICA] para evitar que mexam na lista principal
   List<Product> get items => [..._items];
@@ -31,16 +32,25 @@ class Products with ChangeNotifier {
     final Uri _urlLoad = Uri.parse("${_baseUrl}.json?auth=$_token");
     final response = await http.get(_urlLoad);
     Map<String, dynamic>? data = json.decode(response.body);
+
+    final Uri _urlFavorite = Uri.parse(
+        "${Constants.BASE_API_URL}/userFavorites/$_userId.json?auth=$_token");
+
+    final favoriteResponse = await http.get(_urlFavorite);
+    final favoriteMap = json.decode(favoriteResponse.body);
+
     _items.clear();
     if (data != null) {
       data.forEach((productId, productData) {
+        final isFavorite =
+            favoriteMap == null ? false : favoriteMap[productId] ?? false;
         _items.add(Product(
           id: productId,
           title: productData['title'],
           description: productData['description'],
           price: productData['price'],
           imageUrl: productData['imageUrl'],
-          isFavorite: productData['isFavorite'],
+          isFavorite: isFavorite,
         ));
       });
       notifyListeners();
@@ -52,7 +62,7 @@ class Products with ChangeNotifier {
   // portanto, é chamado o notifyListeners para "avisar"
   // da alteração
   Future<void> addProduct(Product newProduct) async {
-    final Uri _urlAdd = Uri.parse("${_baseUrl}.json");
+    final Uri _urlAdd = Uri.parse("${_baseUrl}.json?auth=$_token");
 
     final response = await http.post(
       _urlAdd,
@@ -61,7 +71,6 @@ class Products with ChangeNotifier {
         'description': newProduct.description,
         'price': newProduct.price,
         'imageUrl': newProduct.imageUrl,
-        'isFavorite': newProduct.isFavorite,
       }),
     );
     _items.add(
@@ -84,7 +93,8 @@ class Products with ChangeNotifier {
     final index = _items.indexWhere((prod) => prod.id == product.id);
 
     if (index >= 0) {
-      final Uri _urlUpdate = Uri.parse("${_baseUrl}/${product.id}.json");
+      final Uri _urlUpdate =
+          Uri.parse("${_baseUrl}/${product.id}.json?auth=$_token");
       await http.patch(
         _urlUpdate,
         body: json.encode({
@@ -103,7 +113,8 @@ class Products with ChangeNotifier {
     final index = _items.indexWhere((prod) => prod.id == id);
     if (index >= 0) {
       final product = _items[index];
-      final Uri _urlDelete = Uri.parse("${_baseUrl}/${product.id}");
+      final Uri _urlDelete =
+          Uri.parse("${_baseUrl}/${product.id}.json?auth=$_token");
       _items.remove(product);
       notifyListeners();
 
