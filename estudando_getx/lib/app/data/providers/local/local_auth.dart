@@ -12,6 +12,10 @@ class LocalAuth {
     await _storage.write(key: KEY, value: jsonEncode(requestToken.toJson()));
   }
 
+  Future<void> clearSession() async {
+    await _storage.delete(key: KEY);
+  }
+
   Future<RequestToken?> getSession() async {
     final String? data = await _storage.read(key: KEY);
     if (data != null) {
