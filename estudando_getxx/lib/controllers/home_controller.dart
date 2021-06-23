@@ -1,5 +1,6 @@
 import 'package:estudando_getxx/api/users_api.dart';
 import 'package:estudando_getxx/models/user.dart';
+import 'package:estudando_getxx/pages/profile_page.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
@@ -36,5 +37,15 @@ class HomeController extends GetxController {
   void increment() {
     this._counter++;
     update(['text']);
+  }
+
+  Future<void> showUserProfile(User user) async {
+    final result = await Get.to<String>(
+      ProfilePage(),
+      arguments: user,
+    );
+    if (result != null) {
+      print("result = $result");
+    }
   }
 }
