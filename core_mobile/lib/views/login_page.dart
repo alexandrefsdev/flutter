@@ -1,4 +1,4 @@
-import 'package:core_mobile/utils/app_routes.dart';
+import 'package:core_mobile/app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -38,12 +38,13 @@ class _LoginPageState extends State<LoginPage> {
                     username = text;
                   },
                   decoration: InputDecoration(
-                      labelText: 'Usuário',
-                      border: OutlineInputBorder(
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(12.0),
-                        ),
-                      )),
+                    labelText: 'Usuário',
+                    border: OutlineInputBorder(
+                      borderRadius: const BorderRadius.all(
+                        const Radius.circular(12.0),
+                      ),
+                    ),
+                  ),
                 ),
                 SizedBox(height: 20),
                 TextField(

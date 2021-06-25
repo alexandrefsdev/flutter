@@ -1,9 +1,8 @@
-import 'package:core_mobile/utils/app_routes.dart';
-import 'package:core_mobile/views/login_page.dart';
-import 'package:core_mobile/views/projects_screen.dart';
-import 'package:core_mobile/views/tabs_screen.dart';
-import 'package:core_mobile/views/tasks_screen.dart';
+import 'package:core_mobile/app/modules/splash/splash_binding.dart';
+import 'package:core_mobile/app/modules/splash/splash_page.dart';
+import 'package:core_mobile/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 main() {
   runApp(MyApp());
@@ -12,7 +11,7 @@ main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'R2 Telecomunicações',
       theme: ThemeData(
@@ -27,13 +26,9 @@ class MyApp extends StatelessWidget {
               ),
             ),
       ),
-      routes: {
-        AppRoutes.HOME: (ctx) => LoginPage(),
-        AppRoutes.PROJECTS: (ctx) => TabsScreen(),
-        AppRoutes.TASKS: (ctx) => TasksScreen(),
-        // AppRoutes.CATEGORIES_MEALS: (ctx) => CategoriesMealsScreen(),
-        // AppRoutes.MEAL_DETAIL: (ctx) => MealDetailScreen(),
-      },
+      home: SplashPage(),
+      initialBinding: SplashBinding(),
+      getPages: AppPages.pages,
       // onGenerateRoute: ,
       // onUnknownRoute: ,
     );
