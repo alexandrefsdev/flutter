@@ -1,3 +1,4 @@
+import 'package:estudando_getxx/controllers/global_controller.dart';
 import 'package:estudando_getxx/controllers/home_controller.dart';
 import 'package:estudando_getxx/pages/home_page_widgets/home_label.dart';
 import 'package:estudando_getxx/pages/home_page_widgets/home_list.dart';
@@ -14,6 +15,20 @@ class HomePage extends StatelessWidget {
           print("build home");
           return Scaffold(
             // body: HomeList(),
+            appBar: AppBar(
+              actions: [
+                GetBuilder<GlobalController>(
+                  id: 'favorites',
+                  builder: (_) => TextButton(
+                    onPressed: () {},
+                    child: Text("Favoritos (${_.favorites.length})"),
+                    style: TextButton.styleFrom(
+                      primary: Colors.amberAccent,
+                    ),
+                  ),
+                )
+              ],
+            ),
             body: ProductList(),
             floatingActionButton: FloatingActionButton(
               onPressed: () => _.increment(),

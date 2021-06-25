@@ -6,6 +6,9 @@ import 'package:get/get.dart';
 
 class GlobalController extends GetxController {
   List<Product> _products = [];
+  Map<String, Product> _favorites = Map();
+  Map<String, Product> get favorites => _favorites;
+
   List<Product> get products => _products;
 
   @override
@@ -27,9 +30,14 @@ class GlobalController extends GetxController {
     update(['products']);
   }
 
-  onFavorite(int index, bool isFavorite){
+  onFavorite(int index, bool isFavorite) {
     Product product = this._products[index];
     product.isFavorite = isFavorite;
-    update(['products']);
+    if (isFavorite) {
+      this._favorites[product.name] = product;
+    } else {
+      this._favorites.remove(product.name);
+    }
+    update(['products', 'favorites']);
   }
 }
