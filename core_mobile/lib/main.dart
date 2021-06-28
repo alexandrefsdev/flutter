@@ -1,3 +1,5 @@
+import 'package:core_mobile/app/modules/login/login_binding.dart';
+import 'package:core_mobile/app/modules/login/login_page.dart';
 import 'package:core_mobile/app/modules/projects/project_binding.dart';
 import 'package:core_mobile/app/modules/projects/project_page.dart';
 import 'package:core_mobile/app/modules/splash/splash_binding.dart';
@@ -17,9 +19,9 @@ main() {
   runApp(GetMaterialApp(
     debugShowCheckedModeBanner: false,
     // initialRoute: AppRoutes.SPLASH,
-    initialBinding: TabsBinding(),
+    initialBinding: LoginBinding(),
     getPages: AppPages.pages,
-    home: TabsPage(),
+    home: LoginPage(),
     title: 'R2 Telecomunicações',
     theme: appThemeData,
     locale: Locale('pt', 'BR'), // Língua padrão
