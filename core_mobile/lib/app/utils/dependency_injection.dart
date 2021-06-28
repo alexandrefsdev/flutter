@@ -1,9 +1,12 @@
+import 'package:core_mobile/app/data/providers/projects_api.dart';
+import 'package:core_mobile/app/data/repositories/projects_repository.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 
 class DependencyInjection {
   static void init() {
+    print('Injeção de dependência...');
     // Get.lazyPut<FlutterSecureStorage>(() => FlutterSecureStorage(),
     //     fenix: true);
 
@@ -21,15 +24,15 @@ class DependencyInjection {
 
     // Get.put<FlutterSecureStorage>(FlutterSecureStorage());
 
-    // Get.put<Dio>(Dio(BaseOptions(baseUrl: 'https://api.themoviedb.org/3')));
+    Get.put<Dio>(Dio(BaseOptions(baseUrl: 'http://192.168.0.52:3000/api/v1/')));
     // // providers
     // Get.put<AuthenticationApi>(AuthenticationApi());
     // Get.put<LocalAuth>(LocalAuth());
-    // Get.put<MoviesAPI>(MoviesAPI());
+    Get.put<ProjectsAPI>(ProjectsAPI());
 
     // // repositories
     // Get.put<AuthenticationRepository>(AuthenticationRepository());
     // Get.put<LocalAuthRepository>(LocalAuthRepository());
-    // Get.put<MoviesRepository>(MoviesRepository());
+    Get.put<ProjectsRepository>(ProjectsRepository());
   }
 }

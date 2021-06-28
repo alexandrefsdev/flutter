@@ -1,36 +1,29 @@
+import 'package:core_mobile/app/modules/projects/project_binding.dart';
+import 'package:core_mobile/app/modules/projects/project_page.dart';
 import 'package:core_mobile/app/modules/splash/splash_binding.dart';
 import 'package:core_mobile/app/modules/splash/splash_page.dart';
+import 'package:core_mobile/app/modules/tabs/tabs_binding.dart';
+import 'package:core_mobile/app/modules/tabs/tabs_controller.dart';
+import 'package:core_mobile/app/modules/tabs/tabs_page.dart';
 import 'package:core_mobile/app/routes/app_pages.dart';
+import 'package:core_mobile/app/routes/app_routes.dart';
+import 'package:core_mobile/app/theme/theme.dart';
+import 'package:core_mobile/app/utils/dependency_injection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'R2 Telecomunicações',
-      theme: ThemeData(
-        primarySwatch: Colors.red,
-        accentColor: Colors.amber,
-        fontFamily: 'Lato',
-        // canvasColor: Color.fromRGBO(255, 254, 229, 1),
-        textTheme: ThemeData.light().textTheme.copyWith(
-              headline6: TextStyle(
-                fontSize: 20,
-                fontFamily: 'RobotoCondensed',
-              ),
-            ),
-      ),
-      home: SplashPage(),
-      initialBinding: SplashBinding(),
-      getPages: AppPages.pages,
-      // onGenerateRoute: ,
-      // onUnknownRoute: ,
-    );
-  }
+  DependencyInjection.init();
+  runApp(GetMaterialApp(
+    debugShowCheckedModeBanner: false,
+    // initialRoute: AppRoutes.SPLASH,
+    initialBinding: TabsBinding(),
+    getPages: AppPages.pages,
+    home: TabsPage(),
+    title: 'R2 Telecomunicações',
+    theme: appThemeData,
+    locale: Locale('pt', 'BR'), // Língua padrão
+    // onGenerateRoute: ,
+    // onUnknownRoute: ,
+  ));
 }

@@ -3,18 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class TabsController extends GetxController {
-  int _selectedScreenIndex = 0;
+  int _tabIndex = 0;
   final List<Widget> _screens = [
     ProjectPage(),
     ProjectPage(),
     // FavoriteScreen(),
   ];
 
-  int get selectedScreenIndex => _selectedScreenIndex;
+  int get selectedScreenIndex => _tabIndex;
   List<Widget> get screens => _screens;
 
-  selectScreen(int index) {
-    _selectedScreenIndex = index;
+  void changedTabIndex(int index) {
+    _tabIndex = index;
+    update();
   }
 
   // final List<Map<String, Object>> _screens = [

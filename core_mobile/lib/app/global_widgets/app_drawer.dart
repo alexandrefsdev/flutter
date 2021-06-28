@@ -1,5 +1,6 @@
 import 'package:core_mobile/app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -14,11 +15,12 @@ class AppDrawer extends StatelessWidget {
           Divider(),
           ListTile(
             leading: Icon(Icons.shop),
-            title: Text('Home'),
+            title: Text('Projetos'),
             onTap: () {
-              Navigator.of(context).pushReplacementNamed(
-                AppRoutes.PROJECTS,
-              );
+              // Navigator.of(context).pushReplacementNamed(
+              //   AppRoutes.PROJECTS,
+              // );
+              Get.toNamed(AppRoutes.TABS);
             },
           ),
           Divider(),
