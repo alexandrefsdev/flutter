@@ -15,6 +15,8 @@ class MoviesAPI {
       },
     );
 
+    print(response);
+
     return (response.data['results'] as List)
         .map((e) => Movie.fromJson(e))
         .toList();

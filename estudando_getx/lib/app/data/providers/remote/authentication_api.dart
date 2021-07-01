@@ -3,7 +3,6 @@ import 'package:estudando_getx/app/data/models/request_token.dart';
 import 'package:estudando_getx/app/data/utils/constants.dart';
 import 'package:get/get.dart';
 
-
 class AuthenticationApi {
   final Dio _dio = Get.find<Dio>();
 
